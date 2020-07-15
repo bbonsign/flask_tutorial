@@ -1,0 +1,55 @@
+from flask import Flask, url_for, render_template, abort
+from markupsafe import escape
+
+app = Flask(__name__)
+
+print(__name__)
+
+@app.route("/")
+def hello():
+    # return render_template('hello.html', number=42)
+    return {'key': 3453, 'another': 'hello'}
+
+
+@app.route("/testing/<float:url_arg>")
+def testing(url_arg):
+    url_arg = escape(url_arg)
+    return render_template('hello.html', number=url_arg)
+
+
+with app.test_request_context():
+    print("******************************")
+    print(url_for('testing', url_arg=1.23))
+
+# Example of using session from Flask quick start tutorial
+# from flask import Flask, session, redirect, url_for, request
+# from markupsafe import escape
+
+# app = Flask(__name__)
+
+# # Set the secret key to some random bytes. Keep this really secret!
+# app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+# @app.route('/')
+# def index():
+#     if 'username' in session:
+#         return 'Logged in as %s' % escape(session['username'])
+#     return 'You are not logged in'
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if request.method == 'POST':
+#         session['username'] = request.form['username']
+#         return redirect(url_for('index'))
+#     return '''
+#         <form method="post">
+#             <p><input type=text name=username>
+#             <p><input type=submit value=Login>
+#         </form>
+#     '''
+
+# @app.route('/logout')
+# def logout():
+#     # remove the username from the session if it's there
+#     session.pop('username', None)
+#     return redirect(url_for('index'))
